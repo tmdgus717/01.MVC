@@ -2,13 +2,14 @@
     pageEncoding="EUC-KR"%>
 <%@ page import="java.util.*"  %>
 <%@ page import="com.model2.mvc.service.product.vo.*" %>
+<%@ page import="com.model2.mvc.service.purchase.vo.*" %>
 <%@ page import="com.model2.mvc.common.*" %>    
     
 <!DOCTYPE html>
 
 <%
-
-
+	int a = 1;
+	
 	HashMap<String,Object> map=(HashMap<String,Object>)request.getAttribute("map");
 	SearchVO searchVO=(SearchVO)request.getAttribute("searchVO");
 	
@@ -91,14 +92,14 @@ function fncGetUserList(){
 		<%
 				if(searchVO.getSearchCondition().equals("0")){
 		%>
-				<option value="0">상품번호</option>
+				<option value="0" selected>상품번호</option>
 				<option value="1">상품명</option>
 				<option value="2">상품가격</option>
 		<%
 				}else if(searchVO.getSearchCondition().equals("1")) {
 		%>
 				<option value="0">상품번호</option>
-				<option value="1">상품명</option>
+				<option value="1" selected>상품명</option>
 				<option value="2">상품가격</option>
 				
 		<%
@@ -106,7 +107,7 @@ function fncGetUserList(){
 		%>
 				<option value="0">상품번호</option>
 				<option value="1">상품명</option>
-				<option value="2">상품가격</option>
+				<option value="2" selected>상품가격</option>
 		<%
 				}
 		%>
@@ -168,6 +169,7 @@ function fncGetUserList(){
 		int no=list.size();
 		for(int i=0; i<list.size(); i++) {
 			ProductVO vo = (ProductVO)list.get(i);
+			System.out.print(vo.getProTranCode());
 	%>
 	<tr class="ct_list_pop">
 		<td align="center"><%=no--%></td>
@@ -184,7 +186,20 @@ function fncGetUserList(){
 		<td></td>
 		<td align="left"><%= vo.getManuDate() %></td>
 		<td></td>
-		<td align="left">재고없음</td>
+		<td align="left">
+		
+		<%if(vo.getProTranCode().trim().equals("0")){  %>
+			판매중 
+		<%}else if(vo.getProTranCode().trim().equals("1")){ %>
+			구매완료 <%if(sel.equals("manage")){%>
+						<a href="/updateTranCodeByProd.do?prodNo=<%=vo.getProdNo() %>&tranCode=2">배송하기</a>
+					<%} %>
+		<%}else if(vo.getProTranCode().trim().equals("2")){ %>
+			배송중
+		<%}else{ %>
+			배송완료
+		<%} %>
+		</td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>

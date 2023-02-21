@@ -34,7 +34,10 @@ public class ListProductAction  extends Action{
 		
 		request.setAttribute("map", map);
 		request.setAttribute("searchVO", searchVO);
+		if(request.getParameter("menu").equals("manage")) {
+			request.setAttribute("menu", "manage");
+		}
 		return "forward:/product/listProduct.jsp";
-	}
+	} 
 
 }

@@ -8,21 +8,26 @@ import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
 import com.model2.mvc.service.purchase.vo.PurchaseVO;
 
-
-public class GetPurchaseAction extends Action {
+public class UpdateTranCodeAction extends Action {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
+
+		System.out.println("UpdateTranCodeACtion START....");
 		int tranNo=Integer.parseInt(request.getParameter("tranNo"));
-		System.out.println("tranNo ¿‘¥œ¥Ÿ : "+tranNo);
+		String tranCode=request.getParameter("tranCode");
+
+		System.out.println("&&UTCBP tranCode=="+tranNo);
+		System.out.println("&&UTCBP tranCode=="+tranCode);
+		PurchaseVO purchaseVO=new PurchaseVO();
+		purchaseVO.setTranNo(tranNo);
+		purchaseVO.setTranCode(tranCode);
 		
 		PurchaseService service=new PurchaseServiceImpl();
-		PurchaseVO vo=service.getPuchase(tranNo);
+		service.updateTranCode(purchaseVO);
 		
-		request.setAttribute("vo", vo);
-
-		return "forward:/purchase/getPurchase.jsp";
+		return "redirect:/listPurchase.do";
 	}
 
 }

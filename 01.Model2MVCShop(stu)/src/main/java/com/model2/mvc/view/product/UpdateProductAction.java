@@ -14,7 +14,6 @@ public class UpdateProductAction extends Action {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
 		int prodNo=Integer.parseInt(request.getParameter("prodNo"));
 		
 		ProductVO prodVO=new ProductVO();

@@ -8,6 +8,8 @@
 <%@ page import="com.model2.mvc.service.user.vo.*" %>
 <%
 	PurchaseVO vo = (PurchaseVO)session.getAttribute("purchase");
+//	UserVO vo2= (UserVO)session.getAttribute("user");
+	//System.out.println(vo2.getUserId());
 %>	
 
 

@@ -92,7 +92,7 @@ function fncGetUserList(){
 	%>
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/getPurchase.do?tranNo<%=vo.getTranNo() %>"><%=no--%></a>
+			<a href="/getPurchase.do?tranNo=<%=vo.getTranNo() %>"><%=no--%></a>
 		</td>
 		<td></td>
 		<td align="left">
@@ -103,11 +103,17 @@ function fncGetUserList(){
 		<td></td>
 		<td align="left"><%= vo.getReceiverPhone() %></td>		
 		<td></td>
-		<td align="left">현재 <% if(vo.getTranCode().equals("0")){
+		<td align="left">현재 <% if(vo.getTranCode().trim().equals("1")){
+				out.print("구매완료");
+			}else if(vo.getTranCode().trim().equals("2")){
 				out.print("배송중");
 			}else{
-				out.print("구매완료");
+				out.print("배송완료");
 			}%> 상태 입니다.</td>		
+		<td></td>
+		<td align="left"><% if(vo.getTranCode().trim().equals("2")){%>
+			<a href="/updateTranCode.do?tranNo=<%=vo.getTranNo() %>&tranCode=3">물건도착</a>
+			<%}%> </td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
@@ -121,7 +127,7 @@ function fncGetUserList(){
 		<%
 			for(int i=1;i<=totalPage;i++){
 		%>
-			<a href="/listUser.do?page=<%=i%>"><%=i %></a>
+			<a href="/listPurchase.do?page=<%=i%>"><%=i %></a>
 		<%
 			}
 		%>	

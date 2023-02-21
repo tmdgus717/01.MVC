@@ -59,8 +59,17 @@ public class PurchaseDAO {
 		PurchaseVO purchaseVO = null;
 		while (rs.next()) {
 			purchaseVO = new PurchaseVO();
-			purchaseVO.setTranNo(Integer.parseInt(rs.getString("tran_no")));;
-	
+			purchaseVO.setTranNo(rs.getInt("tran_no"));
+			purchaseVO.setPurchaseProd(prods.getProduct(rs.getInt("prod_no")));
+			purchaseVO.setPaymentOption(rs.getString("payment_option"));
+			purchaseVO.setBuyer(users.getUser(rs.getString("buyer_id")));
+			purchaseVO.setReceiverName(rs.getString("receiver_name"));
+			purchaseVO.setReceiverPhone(rs.getString("receiver_phone"));
+			purchaseVO.setDivyAddr(rs.getString("DEMAILADDR"));
+			purchaseVO.setDivyRequest(rs.getString("dlvy_request"));
+			purchaseVO.setTranCode(rs.getString("tran_status_code"));
+			purchaseVO.setOrderDate(rs.getDate("order_data"));
+			purchaseVO.setDivyDate(rs.getString("dlvy_date"));
 		}
 		
 		con.close();
@@ -108,27 +117,16 @@ public class PurchaseDAO {
 				PurchaseVO vo = new PurchaseVO(); //UserVO에 set한다.
 			
 				vo.setTranNo(rs.getInt("tran_no"));
-				System.out.println("1");
 				vo.setPurchaseProd(prods.getProduct(rs.getInt("prod_no")));
-				System.out.println("2");
 				vo.setPaymentOption(rs.getString("payment_option"));
-				System.out.println("3");
 				vo.setBuyer(users.getUser(rs.getString("buyer_id")));
-				System.out.println("4");
 				vo.setReceiverName(rs.getString("receiver_name"));
-				System.out.println("5");
 				vo.setReceiverPhone(rs.getString("receiver_phone"));
-				System.out.println("6");
 				vo.setDivyAddr(rs.getString("DEMAILADDR"));
-				System.out.println("7");
 				vo.setDivyRequest(rs.getString("dlvy_request"));
-				System.out.println("8");
 				vo.setTranCode(rs.getString("tran_status_code"));
-				System.out.println("9");
 				vo.setOrderDate(rs.getDate("order_data"));
-				System.out.println("10");
 				vo.setDivyDate(rs.getString("dlvy_date"));
-				System.out.println("11");
 				list.add(vo); //리스트에 넣는다.
 				if (!rs.next()) // rs.next 다음값이 있으면 true=> !true= false 고로 break 패스
 					break; //rs.next 다음값이 없으면 false => !false = true 고로 break;
@@ -142,5 +140,56 @@ public class PurchaseDAO {
 		con.close(); //db 종료
 			
 		return map; //map 으로 반환 ["count"=Integer total,"list"=ArrayList list(User)]
+	}
+	public void updatePurchase(PurchaseVO purchaseVO) throws Exception {
+		
+		Connection con = DBUtil.getConnection();
+
+		String sql = "update transaction set PAYMENT_OPTION=?,RECEIVER_NAME=?,DEMAILADDR=?,RECEIVER_PHONE=?, DLVY_REQUEST=?,DLVY_DATE=? where tran_no=?";
+		//DLVY_DATE=?
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, purchaseVO.getPaymentOption());
+		System.out.println(purchaseVO.getPaymentOption());
+		stmt.setString(2, purchaseVO.getReceiverName());
+		System.out.println(purchaseVO.getReceiverName());
+		stmt.setString(3, purchaseVO.getDivyAddr());
+		stmt.setString(4, purchaseVO.getReceiverPhone());
+		stmt.setString(5, purchaseVO.getDivyRequest());
+		stmt.setString(6, purchaseVO.getDivyDate());
+		stmt.setInt(7, purchaseVO.getTranNo());
+		System.out.println(purchaseVO.getTranNo());
+		stmt.executeUpdate();
+		
+		con.close();
+	}	
+	public void updateTranCodeByProd(int no, PurchaseVO purchaseVO) throws Exception {
+		
+		Connection con = DBUtil.getConnection();
+		
+		
+		String sql = "update transaction set TRAN_STATUS_CODE=? where prod_no=?";
+		//DLVY_DATE=?
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, purchaseVO.getTranCode());
+		System.out.println(purchaseVO.getTranCode());
+		stmt.setInt(2, no);
+		stmt.executeUpdate();
+		
+		con.close();
+	}
+	public void updateTranCode(PurchaseVO purchaseVO) throws Exception {
+		// TODO Auto-generated method stub
+		Connection con = DBUtil.getConnection();
+		
+		String sql = "update transaction set TRAN_STATUS_CODE=? where tran_no=?";
+		//DLVY_DATE=?
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, purchaseVO.getTranCode());
+		System.out.println(purchaseVO.getTranCode());
+		stmt.setInt(2, purchaseVO.getTranNo());
+		System.out.println(purchaseVO.getTranNo());
+		stmt.executeUpdate();
+		
+		con.close();
 	}
 }

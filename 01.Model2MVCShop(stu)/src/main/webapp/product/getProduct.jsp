@@ -4,6 +4,7 @@
 
 <%@ page import="com.model2.mvc.service.product.vo.*" %>
 
+<%@ page import="com.model2.mvc.service.user.vo.*" %>
 <%
 	ProductVO vo = (ProductVO)request.getAttribute("vo");
 
